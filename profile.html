@@ -11,7 +11,7 @@
             margin: 0;
             font-family: 'Merriweather', serif;
             color: #FFF8E7;
-            overflow-x: hidden; /* Prevent horizontal scroll */
+            overflow-x: hidden; 
             position: relative;
         }
         body::before {
@@ -142,7 +142,7 @@
     </div>
 
     <script>
-        // --- Modal Logic ---
+        
         const modal = document.getElementById('showdownModal');
         const showdownBtn = document.getElementById('showdownBtn');
         const closeBtn = document.querySelector('.close-btn');
@@ -154,54 +154,54 @@
             }
         };
 
-        // --- Profile and Auth Logic ---
+        
         document.addEventListener('DOMContentLoaded', async () => {
             const token = localStorage.getItem('authToken');
             const usernameDisplay = document.getElementById('username-display');
             const balanceDisplay = document.getElementById('balance-display');
 
             if (!token) {
-                // If no token, redirect to login page
+               
                 window.location.href = 'login.html';
                 return;
             }
 
             try {
-                // Fetch user profile data
-                const response = await fetch('http://localhost:3000/auth/profile', {
+                
+                const response = await fetch('https://dead-eye-backend.onrender.com/auth/profile', {
                     method: 'GET',
                     headers: {
                         'Content-Type': 'application/json',
-                        'x-auth-token': token, // Send the token in the header
+                        'x-auth-token': token, 
                     },
                 });
 
                 if (!response.ok) {
-                    // If token is invalid or expired, clear it and redirect
+                    
                     throw new Error('Session expired. Please log in again.');
                 }
 
                 const user = await response.json();
 
-                // Update the page with user data
+             
                 usernameDisplay.textContent = user.username;
                 balanceDisplay.textContent = `$${user.balance.toLocaleString()}`;
 
             } catch (error) {
                 console.error('Profile fetch error:', error);
-                // Clear bad token and redirect to login
+              
                 localStorage.removeItem('authToken');
                 window.location.href = 'login.html';
             }
         });
 
-        // --- Logout Logic ---
+       
         const logoutBtn = document.getElementById('logoutBtn');
         logoutBtn.addEventListener('click', (event) => {
             event.preventDefault();
-            // Remove the token from storage
+            
             localStorage.removeItem('authToken');
-            // Redirect to the login page
+            
             window.location.href = 'login.html';
         });
     </script>
