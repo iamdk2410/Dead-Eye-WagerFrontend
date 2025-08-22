@@ -1,0 +1,148 @@
+       @import url('https://fonts.googleapis.com/css2?family=Merriweather:wght@400;700&family=Rye&display=swap');
+
+        body {
+            background-color: #1A1A1A; 
+            color: #FFF8E7; 
+            font-family: 'Merriweather', serif; 
+            margin: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            padding: 2rem 0;
+            background-image: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('login.jpg');
+            background-size: cover;
+            background-position: center;
+        }
+
+        .login-container {
+            background-color: #FFF8E7;
+            color: #1A1A1A; 
+            padding: 2rem 3rem;
+            border: 4px solid #A0522D; 
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            max-width: 450px;
+            width: 100%;
+            text-align: center;
+        }
+
+        .login-container h1 {
+            font-family: 'Rye', cursive;
+            font-size: 2.5rem;
+            color: #A52A2A; 
+            margin-top: 0;
+            margin-bottom: 1.5rem;
+        }
+
+        .input-group {
+            margin-bottom: 1.5rem;
+            text-align: left;
+        }
+
+        .input-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 700;
+        }
+
+        .input-group input {
+            width: 100%;
+            padding: 10px;
+            background-color: #fdfcf7;
+            border: 1px solid #464646; 
+            box-sizing: border-box; 
+            font-family: 'Merriweather', serif;
+            font-size: 1rem;
+        }
+
+        .pass {
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+
+        .pass input {
+            padding-right: 40px;
+        }
+
+        #togglePassword {
+            position: absolute;
+            right: 10px;
+            cursor: pointer;
+            user-select: none;
+            font-size: 1.2rem;
+            color: #464646;
+        }
+
+        /* --- Avatar Selection --- */
+        .avatar-section {
+            text-align: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .avatar-preview {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            border: 4px solid #A0522D;
+            object-fit: cover;
+            margin-bottom: 1rem;
+            background-color: #e0e0e0;
+        }
+
+        .avatar-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+        }
+
+        .avatar-option {
+            width: 100%;
+            border-radius: 50%;
+            cursor: pointer;
+            border: 3px solid transparent;
+            transition: border-color 0.2s;
+        }
+        
+        .avatar-option:hover {
+            border-color: #A0522D;
+        }
+
+        .avatar-option.selected {
+            border-color: #A52A2A; 
+        }
+
+
+        .btn {
+            font-family: 'Rye', cursive;
+            font-size: 1.2rem;
+            color: #FFF8E7;
+            background-color: #A0522D; 
+            border: 2px solid #464646;
+            padding: 10px 25px;
+            cursor: pointer;
+            text-transform: uppercase;
+            text-decoration: none;
+            transition: all 0.2s ease-in-out;
+            box-shadow: 4px 4px 8px rgba(0,0,0,0.5);
+            width: 100%;
+        }
+
+        .btn:hover {
+            background-color: #8B4513; 
+            transform: translateY(-2px);
+        }
+
+        .links {
+            margin-top: 1.5rem;
+            font-size: 0.9rem;
+        }
+
+        .links a {
+            color: #A52A2A;
+            text-decoration: none;
+        }
+
+        .links a:hover {
+            text-decoration: underline;
+        }

@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dead-Eye Wager - The Saloon</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Merriweather:wght@400;700&family=Rye&display=swap');
+
+        body {
+            background-color: #1A1A1A; 
+            color: #FFF8E7; 
+            font-family: 'Merriweather', serif; 
+            margin: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            background-image: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('dustysaloon.jpg');
+            background-size: cover;
+            background-position: center;
+        }
+
+        .lobby-container {
+            background-color: rgba(255, 248, 231, 0.9); 
+            color: #1A1A1A;
+            padding: 2rem 3rem;
+            border: 4px solid #A0522D; 
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            max-width: 600px;
+            width: 100%;
+            text-align: center;
+            backdrop-filter: blur(4px);
+        }
+
+        .lobby-container h1 {
+            font-family: 'Rye', cursive;
+            font-size: 3rem;
+            color: #A52A2A; 
+            margin-top: 0;
+            margin-bottom: 2rem;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.2);
+        }
+
+        .action-box {
+            margin-bottom: 2rem;
+            padding: 1.5rem;
+            border: 2px dashed #A0522D;
+        }
+
+        .action-box h2 {
+            font-family: 'Rye', cursive;
+            font-size: 1.8rem;
+            margin-top: 0;
+            margin-bottom: 1rem;
+        }
+
+        .input-group {
+            display: flex;
+            gap: 10px;
+        }
+
+        .input-group input {
+            flex-grow: 1;
+            padding: 15px;
+            background-color: #fdfcf7;
+            border: 2px solid #464646; 
+            box-sizing: border-box;
+            font-family: 'Merriweather', serif;
+            font-size: 1.2rem;
+            text-align: center;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+        }
+
+        .btn {
+            font-family: 'Rye', cursive;
+            font-size: 1.2rem;
+            color: #FFF8E7;
+            background-color: #A0522D;
+            border: 2px solid #464646;
+            padding: 15px 30px;
+            cursor: pointer;
+            text-transform: uppercase;
+            text-decoration: none;
+            transition: all 0.2s ease-in-out;
+            box-shadow: 4px 4px 8px rgba(0,0,0,0.5);
+            width: 100%;
+        }
+        
+        .btn.primary {
+             background-color: #A52A2A; 
+        }
+
+        .btn:hover {
+            background-color: #8B4513; 
+            transform: translateY(-2px);
+        }
+        
+        .btn.primary:hover {
+            background-color: #6e0000;
+        }
+        
+        .divider {
+            font-family: 'Rye', cursive;
+            font-size: 1.5rem;
+            color: #A0522D;
+            margin: 1rem 0;
+        }
+
+    </style>
+</head>
+<body>
+
+    <div class="lobby-container">
+        <h1>The Saloon</h1>
+        
+        <div class="action-box">
+            <h2>Start a New Duel</h2>
+            <button class="btn primary">Create a Showdown</button>
+        </div>
+
+        <div class="divider">- OR -</div>
+
+        <div class="action-box">
+            <h2>Join a Rival</h2>
+            <form class="input-group">
+                <input type="text" placeholder="ENTER CODE" maxlength="6">
+                <button type="submit" class="btn">Join</button>
+            </form>
+        </div>
+    </div>
+
+</body>
+</html>

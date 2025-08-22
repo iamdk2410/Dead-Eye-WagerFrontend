@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dead-Eye Wager</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Merriweather:wght@400;700&family=Rye&display=swap');
+        body {
+            background-color: #1A1A1A;
+            margin: 0;
+            font-family: 'Merriweather', serif;
+            color: #FFF8E7;
+            overflow-x: hidden; /* Prevent horizontal scroll */
+            position: relative;
+        }
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background-image: linear-gradient(rgba(0,0,0,0.8), rgba(0,0,0,0.8)), url('dustysaloon.jpg');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            animation: kenBurns 20s infinite alternate ease-in-out;
+            z-index: -1;
+        }
+        @keyframes kenBurns {
+            from { transform: scale(1); }
+            to { transform: scale(1.05); }
+        }
+        .container { max-width: 1100px; margin: 0 auto; padding: 2rem; }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes flicker {
+            0%, 18%, 22%, 25%, 53%, 57%, 100% {
+                text-shadow: 0 0 4px #A52A2A, 0 0 10px #A52A2A, 0 0 18px #A52A2A, 2px 2px 8px rgba(0,0,0,0.8);
+            }
+            20%, 24%, 55% { text-shadow: 2px 2px 8px rgba(0,0,0,0.8); }
+        }
+        .page-header { text-align: center; margin-bottom: 2rem; animation: fadeIn 0.5s ease-out forwards; }
+        h1 { font-family: 'Rye', cursive; font-size: 3rem; color: #A52A2A; animation: flicker 6s infinite alternate; margin: 0; }
+        nav { background-color: #A0522D; padding: 10px; border-radius: 4px; box-shadow: 0 4px 15px rgba(0,0,0,0.6); margin-top: 1rem; }
+        nav ul { list-style-type: none; margin: 0; padding: 0; }
+        nav li { display: inline; margin: 0 20px; }
+        nav a { color: #FFF8E7; text-decoration: none; transition: all 0.3s ease; display: inline-block; padding: 5px; }
+        nav a svg { width: 32px; height: 32px; stroke-width: 2; transition: all 0.3s ease; }
+        nav a:hover { transform: translateY(-3px); }
+        nav a:hover svg { stroke: #1A1A1A; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.4)); }
+        .main-content { display: grid; grid-template-columns: 300px 1fr; gap: 2rem; margin-top: 2rem; animation: fadeIn 0.5s ease-out 0.2s forwards; opacity: 0; }
+        .profile-card { background-color: rgba(255, 248, 231, 0.1); border: 2px solid #A0522D; padding: 1.5rem; border-radius: 8px; text-align: center; box-shadow: inset 0 0 15px rgba(0,0,0,0.5); }
+        .profile-card .avatar { width: 150px; height: 150px; border-radius: 50%; border: 4px solid #FFF8E7; margin-bottom: 1rem; }
+        .profile-card .username { font-family: 'Rye', cursive; font-size: 2.2rem; margin: 0.5rem 0; color: #FFF8E7; }
+        .profile-card .coin-balance { font-size: 1.5rem; color: #DAA520; font-weight: 700; }
+        .profile-card .btn { margin-top: 1.5rem; }
+        .profile-card .btn a { display: block; text-decoration: none; color: #FFF8E7; font-family: 'Rye', cursive; font-size: 1.5em; font-weight: 600; padding: 15px 20px; border-radius: 5px; background-color: #A52A2A; transition: transform 0.2s ease, box-shadow 0.2s ease; box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.4); cursor: pointer; }
+        .profile-card .btn a:hover { transform: translateY(-2px) scale(1.05); box-shadow: 0px 8px 20px rgba(0, 0, 0, 0.6); }
+        .profile-card .btn a:active { transform: translateY(1px) scale(1.0); box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.5); }
+        .stats-history { background-color: rgba(255, 248, 231, 0.1); border: 2px solid #A0522D; padding: 1.5rem; border-radius: 8px; }
+        .stats-history h2 { font-family: 'Rye', cursive; font-size: 2rem; color: #A52A2A; margin-top: 0; border-bottom: 2px solid #A0522D; padding-bottom: 0.5rem; }
+        .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 1.5rem; margin-bottom: 2rem; }
+        .stat-item { background-color: rgba(0,0,0,0.3); padding: 1rem; border-radius: 4px; text-align: center; }
+        .stat-item .label { font-size: 1rem; color: #ccc; }
+        .stat-item .value { font-size: 2rem; font-weight: 700; color: #FFF8E7; }
+        .history-ledger { max-height: 250px; overflow-y: auto; border: 1px solid #464646; background-color: rgba(0,0,0,0.2); }
+        table { width: 100%; border-collapse: collapse; }
+        th, td { padding: 12px 15px; text-align: left; }
+        thead { background-color: #A0522D; color: #1A1A1A; font-family: 'Rye', cursive; position: sticky; top: 0; }
+        tbody tr { border-bottom: 1px solid #464646; }
+        tbody tr:nth-child(even) { background-color: rgba(0,0,0,0.2); }
+        .result-win { color: #28a745; font-weight: bold; }
+        .result-loss { color: #dc3545; font-weight: bold; }
+        .modal { position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.7); display: flex; align-items: center; justify-content: center; opacity: 0; visibility: hidden; transition: opacity 0.4s ease, visibility 0.4s ease; }
+        .modal.visible { opacity: 1; visibility: visible; }
+        .modal.visible .modal-content { transform: translateY(0); opacity: 1; }
+        .modal-content { background-color: #FFF8E7; color: #1A1A1A; padding: 2rem; border: 2px solid #1A1A1A; box-shadow: 0 0 0 4px #A0522D, 0 10px 40px rgba(0,0,0,0.7); max-width: 500px; width: 90%; text-align: center; position: relative; transform: translateY(20px); opacity: 0; transition: transform 0.4s ease, opacity 0.4s ease; }
+        .modal-content h2 { font-family: 'Rye', cursive; font-size: 2.5rem; color: #A52A2A; margin-top: 0; margin-bottom: 2rem; animation: fadeIn 0.5s ease-out 0.2s forwards; opacity: 0; }
+        .modal-buttons { display: flex; gap: 1rem; justify-content: center; animation: fadeIn 0.5s ease-out 0.4s forwards; opacity: 0; }
+        .modal-buttons .btn { flex: 1; }
+        .modal-buttons .btn a { width: 100%; box-sizing: border-box; background-color: #A0522D; display: flex; align-items: center; justify-content: center; gap: 10px; padding: 15px 10px; font-size: 1.2em; }
+        .modal-buttons .btn a.primary { background-color: #A52A2A; box-shadow: 0 0 15px rgba(165, 42, 42, 0.5); }
+        .modal-buttons .btn a svg { width: 24px; height: 24px; }
+        .close-btn { position: absolute; top: 10px; right: 20px; color: #1A1A1A; font-size: 2rem; font-weight: bold; cursor: pointer; transition: transform 0.2s ease; }
+        .close-btn:hover { transform: scale(1.2); }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header class="page-header">
+            <h1>Dead-Eye Wager</h1>
+            <nav>
+                <ul>
+                    <li><a href="#" aria-label="Home"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg></a></li>
+                    <li><a href="#" aria-label="Settings"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20a8 8 0 1 0 0-16 8 8 0 0 0 0 16z"></path><path d="M12 14a2 2 0 1 0 0-4 2 2 0 0 0 0 4z"></path><path d="M12 2v2"></path><path d="M12 20v2"></path><path d="m4.93 4.93 1.41 1.41"></path><path d="m17.66 17.66 1.41 1.41"></path><path d="M2 12h2"></path><path d="M20 12h2"></path><path d="m4.93 19.07 1.41-1.41"></path><path d="m17.66 6.34 1.41-1.41"></path></svg></a></li>
+                    <li><a href="#" id="logoutBtn" aria-label="Logout"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg></a></li>
+                </ul>
+            </nav>
+        </header>
+        <main class="main-content">
+            <aside class="profile-card">
+                <img src="https://placehold.co/150x150/A0522D/FFF8E7?text=Outlaw" alt="User Avatar" class="avatar">
+                <h2 class="username" id="username-display">Loading...</h2>
+                <p class="coin-balance" id="balance-display">$----</p>
+                <div class="btn"><a id="showdownBtn">SHOWDOWN</a></div>
+            </aside>
+            <section class="stats-history">
+                <h2>Statistics</h2>
+                <div class="stats-grid">
+                    <div class="stat-item"><span class="label">Duels Won</span><span class="value">42</span></div>
+                    <div class="stat-item"><span class="label">Duels Lost</span><span class="value">35</span></div>
+                    <div class="stat-item"><span class="label">Win Rate</span><span class="value">54.5%</span></div>
+                </div>
+                <h2>Wager History</h2>
+                <div class="history-ledger">
+                    <table>
+                        <thead><tr><th>Opponent</th><th>Wager</th><th>Outcome</th></tr></thead>
+                        <tbody>
+                            <tr><td>Dutch V.</td><td>$100</td><td class="result-win">+ $100</td></tr>
+                            <tr><td>Sadie A.</td><td>$50</td><td class="result-loss">- $50</td></tr>
+                            <tr><td>Anonymous</td><td>$200</td><td class="result-loss">- $200</td></tr>
+                            <tr><td>John M.</td><td>$75</td><td class="result-win">+ $75</td></tr>
+                            <tr><td>Micah B.</td><td>$150</td><td class="result-win">+ $150</td></tr>
+                            <tr><td>Hosea M.</td><td>$25</td><td class="result-win">+ $25</td></tr>
+                            <tr><td>Bill W.</td><td>$50</td><td class="result-loss">- $50</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+        </main>
+    </div>
+    <div id="showdownModal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn">&times;</span>
+            <h2>Choose Your Arena</h2>
+            <div class="modal-buttons">
+                <div class="btn"><a href="#"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg> Offline</a></div>
+                <div class="btn"><a href="ONLINE.HTML" class="primary"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg> Online</a></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // --- Modal Logic ---
+        const modal = document.getElementById('showdownModal');
+        const showdownBtn = document.getElementById('showdownBtn');
+        const closeBtn = document.querySelector('.close-btn');
+        showdownBtn.onclick = () => modal.classList.add('visible');
+        closeBtn.onclick = () => modal.classList.remove('visible');
+        window.onclick = (event) => {
+            if (event.target == modal) {
+                modal.classList.remove('visible');
+            }
+        };
+
+        // --- Profile and Auth Logic ---
+        document.addEventListener('DOMContentLoaded', async () => {
+            const token = localStorage.getItem('authToken');
+            const usernameDisplay = document.getElementById('username-display');
+            const balanceDisplay = document.getElementById('balance-display');
+
+            if (!token) {
+                // If no token, redirect to login page
+                window.location.href = 'login.html';
+                return;
+            }
+
+            try {
+                // Fetch user profile data
+                const response = await fetch('http://localhost:3000/auth/profile', {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'x-auth-token': token, // Send the token in the header
+                    },
+                });
+
+                if (!response.ok) {
+                    // If token is invalid or expired, clear it and redirect
+                    throw new Error('Session expired. Please log in again.');
+                }
+
+                const user = await response.json();
+
+                // Update the page with user data
+                usernameDisplay.textContent = user.username;
+                balanceDisplay.textContent = `$${user.balance.toLocaleString()}`;
+
+            } catch (error) {
+                console.error('Profile fetch error:', error);
+                // Clear bad token and redirect to login
+                localStorage.removeItem('authToken');
+                window.location.href = 'login.html';
+            }
+        });
+
+        // --- Logout Logic ---
+        const logoutBtn = document.getElementById('logoutBtn');
+        logoutBtn.addEventListener('click', (event) => {
+            event.preventDefault();
+            // Remove the token from storage
+            localStorage.removeItem('authToken');
+            // Redirect to the login page
+            window.location.href = 'login.html';
+        });
+    </script>
+</body>
+</html>

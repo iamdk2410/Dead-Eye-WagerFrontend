@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dead-Eye Wager - The Duel</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Merriweather:wght@400;700&family=Rye&display=swap');
+
+        :root {
+            --color-red: #A52A2A;
+            --color-parchment: #FFF8E7;
+            --color-black: #1A1A1A;
+            --color-leather: #A0522D;
+            --font-title: 'Rye', cursive;
+            --font-body: 'Merriweather', serif;
+        }
+
+        body {
+            background-color: var(--color-black);
+            color: var(--color-parchment);
+            font-family: var(--font-body);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            overflow: hidden;
+            position: relative;
+        }
+        
+        body::before {
+            content: '';
+            position: fixed;
+            top: -5%; left: -5%; width: 110%; height: 110%;
+            background-image: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)), url('https://i.imgur.com/eJt0s5r.jpeg');
+            background-size: cover;
+            background-position: center;
+            animation: kenBurns 20s infinite alternate ease-in-out;
+            z-index: -1;
+        }
+
+        @keyframes kenBurns {
+            from { transform: scale(1); }
+            to { transform: scale(1.05); }
+        }
+
+        .game-container {
+            position: relative;
+            width: 1280px;
+            height: 720px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        .header {
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 50px;
+            box-sizing: border-box;
+            font-family: var(--font-title);
+        }
+
+        .player-title { font-size: 2rem; }
+        #p1-title { color: var(--color-red); }
+        #p2-title { color: #DAA520; } /* Gold for P2 */
+        #score-display { font-size: 3.5rem; text-shadow: 2px 2px 5px #000; }
+
+        .video-area {
+            display: flex;
+            justify-content: space-between;
+            width: 100%;
+            margin-top: 20px;
+            gap: 20px;
+        }
+
+        .player-view {
+            width: 560px;
+            height: 420px;
+            position: relative;
+            border-radius: 8px;
+            overflow: hidden;
+            background-color: #000;
+            box-shadow: inset 0 0 15px rgba(0,0,0,0.7);
+        }
+        .player-view canvas {
+            width: 100%;
+            height: 100%;
+            transform: scaleX(-1); /* Flip for mirror view */
+        }
+        #p1-view { border: 4px solid var(--color-red); }
+        #p2-view { border: 4px solid #DAA520; }
+
+        .footer {
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 50px;
+            box-sizing: border-box;
+            margin-top: 20px;
+            font-family: var(--font-body);
+        }
+        .gesture-display, .balance-display {
+            font-size: 1.5rem;
+            font-weight: bold;
+            text-shadow: 1px 1px 3px #000;
+        }
+        .balance-display { color: #DAA520; }
+
+        /* --- Status Overlays --- */
+        .status-overlay {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            display: flex; align-items: center; justify-content: center;
+            flex-direction: column; color: white; pointer-events: none; text-align: center;
+        }
+        
+        #status-text {
+            position: absolute; bottom: 30px; font-size: 2rem; font-family: var(--font-title);
+            text-shadow: 2px 2px 5px #000;
+        }
+
+        #countdown-display {
+            font-family: var(--font-title); font-size: 12rem; color: var(--color-red);
+            text-shadow: 0 0 20px rgba(165, 42, 42, 0.8), 0 0 10px #000;
+        }
+
+        #result-display {
+            background-color: rgba(0,0,0,0.8); padding: 20px 40px; border-radius: 10px;
+            border: 2px solid var(--color-leather);
+        }
+        #result-winner {
+            font-family: var(--font-title); font-size: 3rem;
+            color: #28a745;
+        }
+        
+        .hidden { display: none !important; }
+
+        .btn {
+            font-family: var(--font-title); font-size: 1.2rem; color: var(--color-parchment);
+            background-color: var(--color-leather); border: 2px solid var(--color-black);
+            padding: 15px 30px; cursor: pointer; text-transform: uppercase;
+            text-decoration: none; transition: all 0.2s ease-in-out;
+            box-shadow: 4px 4px 8px rgba(0,0,0,0.5); pointer-events: all;
+        }
+        .btn:hover { background-color: #8B4513; transform: translateY(-2px); }
+        .btn:disabled { background-color: #555; cursor: not-allowed; }
+        #start-button { font-size: 2rem; background-color: var(--color-red); }
+
+        /* --- Game Over Modal --- */
+        #game-over-modal {
+            background-color: rgba(0,0,0,0.8);
+            border: 4px solid var(--color-leather);
+            padding: 2rem 3rem;
+            border-radius: 8px;
+            pointer-events: all;
+        }
+        #game-over-title {
+            font-family: var(--font-title); font-size: 4rem; color: var(--color-red);
+        }
+        #game-over-winner {
+            font-family: var(--font-title); font-size: 3rem; color: #28a745; margin-bottom: 2rem;
+        }
+        .game-over-buttons { display: flex; gap: 1rem; justify-content: center; }
+
+    </style>
+</head>
+<body>
+
+    <div class="game-container">
+        <video id="webcam" autoplay playsinline class="hidden"></video>
+
+        <div class="header">
+            <div id="p1-title" class="player-title">PLAYER 1</div>
+            <div id="score-display">0 - 0</div>
+            <div id="p2-title" class="player-title">PLAYER 2</div>
+        </div>
+
+        <div class="video-area">
+            <div id="p1-view" class="player-view"><canvas id="p1-canvas"></canvas></div>
+            <div id="p2-view" class="player-view"><canvas id="p2-canvas"></canvas></div>
+        </div>
+
+        <div class="footer">
+            <div id="p1-gesture" class="gesture-display">Gesture: ???</div>
+            <div id="p1-balance" class="balance-display">Balance: $100</div>
+            <div id="p2-balance" class="balance-display">Balance: $100</div>
+            <div id="p2-gesture" class="gesture-display">Gesture: ???</div>
+        </div>
+
+        <div class="status-overlay">
+            <button id="start-button" class="btn">DRAW</button>
+            <div id="status-text"></div>
+            <div id="countdown-display" class="hidden"></div>
+            <div id="result-display" class="hidden"><div id="result-winner"></div></div>
+            <div id="game-over-modal" class="hidden">
+                <div id="game-over-title">GAME OVER</div>
+                <div id="game-over-winner"></div>
+                <div class="game-over-buttons">
+                    <button id="play-again-btn" class="btn">Play Again</button>
+                    <button id="return-btn" class="btn">Return to Saloon</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.7.77/Tone.js"></script>
+    <script type="module">
+        import { HandLandmarker, FilesetResolver } from "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.0";
+
+        // --- DOM Elements ---
+        const video = document.getElementById('webcam');
+        const p1Canvas = document.getElementById('p1-canvas');
+        const p2Canvas = document.getElementById('p2-canvas');
+        const p1Ctx = p1Canvas.getContext('2d');
+        const p2Ctx = p2Canvas.getContext('2d');
+        const startButton = document.getElementById('start-button');
+        const playAgainBtn = document.getElementById('play-again-btn');
+        const returnBtn = document.getElementById('return-btn');
+        
+        const scoreDisplay = document.getElementById('score-display');
+        const p1BalanceDisplay = document.getElementById('p1-balance');
+        const p2BalanceDisplay = document.getElementById('p2-balance');
+        const p1GestureDisplay = document.getElementById('p1-gesture');
+        const p2GestureDisplay = document.getElementById('p2-gesture');
+        
+        const statusText = document.getElementById('status-text');
+        const countdownDisplay = document.getElementById('countdown-display');
+        const resultDisplay = document.getElementById('result-display');
+        const resultWinner = document.getElementById('result-winner');
+        const gameOverModal = document.getElementById('game-over-modal');
+        const gameOverWinner = document.getElementById('game-over-winner');
+
+        // --- Sound Engine ---
+        const sounds = {
+            countdown: new Tone.Synth({ oscillator: { type: "sine" }, envelope: { attack: 0.01, decay: 0.1, sustain: 0.2, release: 0.1 } }).toDestination(),
+            swoosh: new Tone.NoiseSynth({ noise: { type: "white" }, envelope: { attack: 0.01, decay: 0.15, sustain: 0, release: 0.1 } }).toDestination(),
+            winRound: new Tone.Synth({ oscillator: { type: "triangle" } }).toDestination(),
+            loseRound: new Tone.Synth({ oscillator: { type: "square" } }).toDestination(),
+            music: new Tone.Player({
+                url: "https://cdn.jsdelivr.net/gh/jake-is-a-dev/dead-eye-wager-assets/saloon-music.mp3",
+                loop: true,
+            }).toDestination()
+        };
+        sounds.music.volume.value = -15;
+
+        // --- Game Constants ---
+        const WINNING_SCORE = 5;
+        const STARTING_BALANCE = 100;
+        const WAGER_AMOUNT = 10;
+
+        // --- Game State Variables ---
+        let handLandmarker;
+        let gameState = "IDLE";
+        let p1Score = 0, p2Score = 0;
+        let p1Balance = STARTING_BALANCE, p2Balance = STARTING_BALANCE;
+        let countdownStartTime = 0, resultDisplayStartTime = 0;
+        let lastRoundWinner = null;
+        let lastVideoTime = -1;
+
+        // --- Initialize HandLandmarker ---
+        async function createHandLandmarker() {
+            const vision = await FilesetResolver.forVisionTasks("https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.0/wasm");
+            handLandmarker = await HandLandmarker.createFromOptions(vision, {
+                baseOptions: {
+                    modelAssetPath: `https://storage.googleapis.com/mediapipe-models/hand_landmarker/hand_landmarker/latest/hand_landmarker.task`,
+                    delegate: "GPU"
+                },
+                runningMode: "VIDEO",
+                numHands: 2
+            });
+            console.log("HandLandmarker loaded.");
+        }
+
+        // --- Gesture Classification ---
+        function classifyGesture(landmarks) {
+            const fingertipY = [landmarks[4].y, landmarks[8].y, landmarks[12].y, landmarks[16].y, landmarks[20].y];
+            const pipY = [landmarks[3].y, landmarks[6].y, landmarks[10].y, landmarks[14].y, landmarks[18].y];
+            const fingersExtended = fingertipY.map((tip, index) => tip < pipY[index]);
+            
+            if (fingersExtended[1] && fingersExtended[2] && !fingersExtended[3] && !fingersExtended[4]) return "Scissors";
+            if (fingersExtended.every(f => f)) return "Paper";
+            if (!fingersExtended.slice(1).some(f => f)) return "Rock";
+            return "Unknown";
+        }
+
+        // --- Round Winner Logic ---
+        function getRoundWinner(g1, g2) {
+            if (g1 === "Unknown" || g2 === "Unknown") return null;
+            if (g1 === g2) return "Tie";
+            if ((g1 === "Rock" && g2 === "Scissors") || (g1 === "Scissors" && g2 === "Paper") || (g1 === "Paper" && g2 === "Rock")) return "Player 1";
+            return "Player 2";
+        }
+        
+        // --- Main Game Loop ---
+        function gameLoop() {
+            if (video.readyState < 2 || gameState === "IDLE") {
+                requestAnimationFrame(gameLoop);
+                return;
+            }
+
+            if (video.currentTime !== lastVideoTime) {
+                lastVideoTime = video.currentTime;
+                handLandmarker.detectForVideo(video, performance.now(), (results) => {
+                    p1Ctx.clearRect(0, 0, p1Canvas.width, p1Canvas.height);
+                    p2Ctx.clearRect(0, 0, p2Canvas.width, p2Canvas.height);
+                    p1Ctx.drawImage(video, 0, 0, p1Canvas.width, p1Canvas.height);
+                    p2Ctx.drawImage(video, 0, 0, p2Canvas.width, p2Canvas.height);
+
+                    let p1Gesture = "Unknown", p2Gesture = "Unknown";
+                    
+                    if (results.landmarks && results.landmarks.length > 0) {
+                        for (const landmarks of results.landmarks) {
+                            const wristX = landmarks[0].x * video.videoWidth;
+                            const gesture = classifyGesture(landmarks);
+                            if (wristX > video.videoWidth / 2) p1Gesture = gesture;
+                            else p2Gesture = gesture;
+                        }
+                    }
+
+                    if (gameState === "COUNTDOWN") {
+                        const elapsed = (performance.now() - countdownStartTime) / 1000;
+                        const countdownValue = 3 - Math.floor(elapsed);
+                        if (countdownValue > 0 && countdownDisplay.textContent !== String(countdownValue)) {
+                            sounds.countdown.triggerAttackRelease("C4", "8n");
+                        }
+                        countdownDisplay.textContent = countdownValue > 0 ? countdownValue : "DRAW!";
+                        if (countdownValue <= -1) {
+                            gameState = "PLAY";
+                            countdownDisplay.classList.add('hidden');
+                        }
+                    } else if (gameState === "PLAY") {
+                        const roundWinner = getRoundWinner(p1Gesture, p2Gesture);
+                        if (roundWinner) {
+                            sounds.swoosh.triggerAttackRelease("8n");
+                            if (roundWinner === "Player 1") {
+                                p1Score++; p1Balance += WAGER_AMOUNT; p2Balance -= WAGER_AMOUNT;
+                                sounds.winRound.triggerAttackRelease(["C4", "E4", "G4"], "8n");
+                            } else if (roundWinner === "Player 2") {
+                                p2Score++; p2Balance += WAGER_AMOUNT; p1Balance -= WAGER_AMOUNT;
+                                sounds.winRound.triggerAttackRelease(["C4", "E4", "G4"], "8n");
+                            } else {
+                                sounds.loseRound.triggerAttackRelease("C3", "8n");
+                            }
+                            lastRoundWinner = roundWinner;
+                            resultDisplayStartTime = performance.now();
+                            gameState = "RESULT";
+                        }
+                    } else if (gameState === "RESULT") {
+                        if (p1Score >= WINNING_SCORE || p2Score >= WINNING_SCORE || p1Balance <= 0 || p2Balance <= 0) {
+                            gameState = "GAME_OVER";
+                        } else if (performance.now() - resultDisplayStartTime > 2500) {
+                            gameState = "COUNTDOWN";
+                            countdownStartTime = performance.now();
+                        }
+                    }
+
+                    drawUi(p1Gesture, p2Gesture);
+                });
+            }
+            requestAnimationFrame(gameLoop);
+        }
+
+        // --- UI Drawing Function ---
+        function drawUi(p1Gesture, p2Gesture) {
+            scoreDisplay.textContent = `${p1Score} - ${p2Score}`;
+            p1BalanceDisplay.textContent = `Balance: $${p1Balance}`;
+            p2BalanceDisplay.textContent = `Balance: $${p2Balance}`;
+            p1GestureDisplay.textContent = `Gesture: ${p1Gesture}`;
+            p2GestureDisplay.textContent = `Gesture: ${p2Gesture}`;
+
+            statusText.textContent = "";
+            countdownDisplay.classList.add('hidden');
+            resultDisplay.classList.add('hidden');
+            gameOverModal.classList.add('hidden');
+
+            if (gameState === "PLAY") {
+                if (p1Gesture === "Unknown" && p2Gesture === "Unknown") statusText.textContent = "Show your hand!";
+                else if (p1Gesture !== "Unknown" && p2Gesture === "Unknown") statusText.textContent = "Waiting for Player 2...";
+                else if (p1Gesture === "Unknown" && p2Gesture !== "Unknown") statusText.textContent = "Waiting for Player 1...";
+            } else if (gameState === "COUNTDOWN") {
+                countdownDisplay.classList.remove('hidden');
+            } else if (gameState === "RESULT") {
+                resultDisplay.classList.remove('hidden');
+                resultWinner.textContent = `Winner: ${lastRoundWinner}`;
+            } else if (gameState === "GAME_OVER") {
+                gameOverModal.classList.remove('hidden');
+                const finalWinner = p1Score >= WINNING_SCORE || p2Balance <= 0 ? "Player 1" : "Player 2";
+                gameOverWinner.textContent = `${finalWinner} WINS!`;
+            }
+        }
+        
+        function resetGame() {
+            p1Score = 0; p2Score = 0;
+            p1Balance = STARTING_BALANCE; p2Balance = STARTING_BALANCE;
+            gameState = "COUNTDOWN";
+            countdownStartTime = performance.now();
+            gameOverModal.classList.add('hidden');
+        }
+
+        // --- Event Listeners ---
+        startButton.addEventListener('click', async () => {
+            try {
+                startButton.textContent = "LOADING...";
+                startButton.disabled = true;
+
+                await Tone.start();
+                
+                // Start loading assets in parallel
+                const landmarkPromise = createHandLandmarker();
+                const audioPromise = Tone.loaded();
+                
+                const stream = await navigator.mediaDevices.getUserMedia({ video: true });
+                video.srcObject = stream;
+                
+                await Promise.all([landmarkPromise, audioPromise]);
+                
+                sounds.music.start();
+
+                video.onloadedmetadata = () => {
+                    p1Canvas.width = video.videoWidth; p1Canvas.height = video.videoHeight;
+                    p2Canvas.width = video.videoWidth; p2Canvas.height = video.videoHeight;
+                    startButton.classList.add('hidden');
+                    resetGame();
+                    gameLoop();
+                };
+                 if (video.readyState >= 2) video.onloadedmetadata();
+
+            } catch (err) {
+                console.error("Failed to start game:", err);
+                startButton.textContent = "ERROR";
+                if (err.name === "NotAllowedError" || err.name === "NotFoundError") {
+                    statusText.textContent = "Couldn't start. Check camera permissions.";
+                } else {
+                    statusText.textContent = "An unexpected error occurred.";
+                }
+            }
+        });
+        
+        playAgainBtn.addEventListener('click', resetGame);
+        returnBtn.addEventListener('click', () => {
+            window.location.href = 'saloon.html'; // Or your main menu page
+        });
+
+    </script>
+</body>
+</html>

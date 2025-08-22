@@ -1,0 +1,151 @@
+@import url('https://fonts.googleapis.com/css2?family=Merriweather:wght@400;700&family=Rye&display=swap');
+
+body {
+    background-color: #1A1A1A; 
+    color: #FFF8E7; 
+    font-family: 'Merriweather', serif; 
+    margin: 0; 
+}
+
+.header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    text-align: center;
+    color: #FFF8E7;
+    background-image: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url('dustysaloon.jpg');
+    background-size: cover;
+    background-position: center;
+}
+
+.header h1 {
+    font-family: 'Rye', cursive;
+    font-size: 8rem;
+    margin-bottom: 0;
+    color: #A52A2A;
+    text-shadow: 4px 4px 8px rgba(0,0,0,0.7);
+}
+
+.header p {
+    font-size: 1.25rem;
+    max-width: 600px;
+    margin-bottom: 2rem;
+}
+
+.btn {
+    font-family: 'Rye', cursive;
+    font-size: 1rem;
+    color: #FFF8E7;
+    background-color: #A0522D;
+    border: 2px solid #464646;
+    padding: 10px 25px;
+    margin: 0 10px;
+    cursor: pointer;
+    text-transform: uppercase;
+    text-decoration: none;
+    transition: all 0.2s ease-in-out;
+    box-shadow: 4px 4px 8px rgba(0,0,0,0.5);
+}
+
+.btn:hover {
+    background-color: #8B4513; 
+    transform: translateY(-2px);
+}
+
+#newspaper-section {
+    background-color: beige;
+    color: #1A1A1A;
+    padding: 4rem 0;
+    font-family: 'Merriweather', serif;
+    border-radius: 100px;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 2rem;
+}
+
+.newspaper-masthead {
+    text-align: center;
+    margin-bottom: 2rem;
+    border-bottom: 4px double #1A1A1A;
+    padding-bottom: 1rem;
+}
+
+.newspaper-masthead h2 {
+    font-family: 'Rye', cursive;
+    font-size: 3.5rem;
+    color: #1A1A1A;
+    margin: 0;
+    text-shadow: none;
+}
+
+.newspaper-masthead p {
+    font-family: 'Merriweather', serif;
+    font-weight: bold;
+    letter-spacing: 2px;
+    font-size: 0.9rem;
+    margin-top: 0.5rem;
+}
+
+.newspaper-content {
+    display: grid;
+    grid-template-columns: 2fr 1fr; 
+    gap: 2rem; 
+}
+
+.main-article h1 {
+    font-family: 'Rye', cursive;
+    font-size: 2.5rem;
+    color: #1A1A1A;
+    margin-bottom: 0.5rem;
+}
+
+.main-article h2 {
+    font-family: 'Merriweather', serif;
+    font-size: 1.2rem;
+    font-style: italic;
+    color: #333;
+    margin-bottom: 1.5rem;
+    text-shadow: none;
+}
+
+.main-article p {
+    margin-bottom: 1rem;
+    text-align: justify; 
+}
+
+.sidebar {
+    border-left: 2px solid #ccc;
+    padding-left: 2rem;
+}
+
+.sidebar-item {
+    margin-bottom: 2rem;
+    padding: 1rem;
+    border: 1px solid #ccc;
+    text-align: center;
+}
+
+.sidebar-item h3 {
+    font-family: 'Rye', cursive;
+    font-size: 1.5rem;
+    text-transform: uppercase;
+    color: #A52A2A;
+    margin-bottom: 0.5rem;
+}
+
+@media (max-width: 768px) {
+    .newspaper-content {
+        grid-template-columns: 1fr; 
+    }
+.sidebar {
+        border-left: none;
+        padding-left: 0;
+        border-top: 2px solid #ccc;
+        padding-top: 2rem;
+    }
+}

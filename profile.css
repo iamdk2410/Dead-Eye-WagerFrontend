@@ -1,0 +1,144 @@
+        @import url('https://fonts.googleapis.com/css2?family=Merriweather:wght@400;700&family=Rye&display=swap');
+
+        body {
+            background-color: #1A1A1A;
+            margin: 0;
+            padding: 2rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+            box-sizing: border-box;
+            background-image: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('dustysaloon.jpg');
+            background-size: cover;
+            background-position: center;
+        }
+
+        h1 {
+            font-family: 'Rye', cursive;
+            font-size: 2rem;
+            color: #A52A2A;
+            text-shadow: 4px 4px 8px rgba(0,0,0,0.7);
+            text-align: center;
+        }
+
+        nav {
+            background-color: #A0522D;
+            padding: 10px;
+            text-align: center; 
+            border-radius: 4px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+            width: 100%;
+            max-width: 700px;
+            margin-bottom: 3rem;
+        }
+
+        nav ul {
+            list-style-type: none;
+            margin: 0;
+            padding: 0;
+        }
+
+        nav li {
+            display: inline;
+            margin: 0 20px;
+        }
+
+        nav a {
+            font-family: 'Rye', cursive;
+            color: #FFF8E7;
+            text-decoration: none;
+            font-size: 1.2rem;
+            transition: color 0.3s;
+        }
+
+        nav a:hover {
+            color: #1A1A1A;
+        }
+
+        .btn a {
+            display: inline-block;
+            text-decoration: none;
+            color: #FFF8E7;
+            font-family: 'Rye', cursive;
+            font-size: 1.5em; 
+            font-weight: 600; 
+            padding: 15px 40px; 
+            border-radius: 5px;
+            background-color: #A52A2A; /* Red color */
+            transition: transform 0.25s ease, box-shadow 0.25s ease;
+            box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.4);
+            cursor: pointer;
+        }
+
+        .btn a:hover {
+            transform: scale(1.05);
+            box-shadow: 0px 6px 15px rgba(0, 0, 0, 0.5);
+        }
+
+        /* --- Modal Styles --- */
+        .modal {
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-content {
+            background-color: #FFF8E7;
+            color: #1A1A1A;
+            padding: 2rem 3rem;
+            border: 4px solid #A0522D;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            max-width: 500px;
+            width: 100%;
+            text-align: center;
+            position: relative;
+        }
+
+        .modal-content h2 {
+            font-family: 'Rye', cursive;
+            font-size: 2.5rem;
+            color: #A52A2A;
+            margin-top: 0;
+            margin-bottom: 2rem;
+        }
+
+        .modal-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+        a{
+            text-decoration: none;
+            color:white ;
+        }
+        
+        .modal-buttons .btn {
+            width: 100%;
+            background-color: #A0522D;
+        }
+        
+        .modal-buttons .btn.primary {
+            background-color: #A52A2A;
+        }
+
+        .close-btn {
+            position: absolute;
+            top: 10px;
+            right: 20px;
+            color: #1A1A1A;
+            font-size: 2rem;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        
+        .hidden {
+            display: none;
+        }

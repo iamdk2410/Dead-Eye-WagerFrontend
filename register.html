@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="login.css">
+    <title>Dead-Eye Wager - Sign Up</title>
+</head>
+<body>
+    <div class="login-container">
+        <h1>Sign the Ledger</h1>
+        <form>
+            <div class="input-group">
+                <label for="username">Your Alias (Username)</label>
+                <input type="text" id="username" name="username" required>
+            </div>
+            <div class="input-group">
+                <label for="password">Secret Word (Password)</label>
+                <div class="pass">
+                    <input type="password" id="password" name="password" required>
+                    <span id="togglePassword">👁️</span>
+                </div>
+            </div>
+
+            <div class="avatar-section">
+                <label>Choose Your Mug</label>
+                <img src="https://placehold.co/100x100/EFEFEF/AAAAAA&text=?" alt="Selected Avatar" class="avatar-preview" id="avatarPreview">
+                <div class="avatar-grid">
+                    <img src="https://placehold.co/100x100/A0522D/FFF8E7?text=Outlaw" alt="Avatar 1" class="avatar-option selected">
+                    <img src="https://placehold.co/100x100/464646/FFF8E7?text=Sheriff" alt="Avatar 2" class="avatar-option">
+                    <img src="https://placehold.co/100x100/DAA520/1A1A1A?text=Prospector" alt="Avatar 3" class="avatar-option">
+                    <img src="https://placehold.co/100x100/013220/FFF8E7?text=Gambler" alt="Avatar 4" class="avatar-option">
+                </div>
+                <input type="hidden" id="avatar-url" name="avatar_url">
+            </div>
+
+            <button type="submit" class="btn">Sign Up</button>
+        </form>
+        <div class="links">
+             <a href="login.html">Already got an alias? Enter Saloon</a>
+        </div>
+    </div>
+
+    <script>
+        const togglePassword = document.querySelector('#togglePassword');
+        const password = document.querySelector('#password');
+
+        togglePassword.addEventListener('click', function (e) {
+            const type = password.getAttribute('type') === 'password' ? 'text' : 'password';
+            password.setAttribute('type', type);
+            this.textContent = type === 'password' ? '👁️' : '🙈';
+        });
+        const avatarOptions = document.querySelectorAll('.avatar-option');
+        const avatarPreview = document.getElementById('avatarPreview');
+        const avatarUrlInput = document.getElementById('avatar-url');
+        avatarPreview.src = avatarOptions[0].src;
+        avatarUrlInput.value = avatarOptions[0].src;
+
+        avatarOptions.forEach(option => {
+            option.addEventListener('click', function() {
+                avatarPreview.src = this.src;
+                avatarUrlInput.value = this.src;
+                avatarOptions.forEach(opt => opt.classList.remove('selected'));
+                this.classList.add('selected');
+            });
+        });
+    </script>
+
+</body>
+</html>

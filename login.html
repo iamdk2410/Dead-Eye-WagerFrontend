@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="login.css">
+    <title>Dead-Eye Wager</title>
+    <style>
+        /* Basic styling for error messages */
+        .error-message {
+            color: #A52A2A;
+            background-color: rgba(255, 248, 231, 0.8);
+            border: 1px solid #A52A2A;
+            padding: 10px;
+            border-radius: 4px;
+            margin-top: 1rem;
+            text-align: center;
+            display: none; /* Hidden by default */
+        }
+    </style>
+</head>
+<body>
+     <div class="login-container">
+         <h1>Enter the Saloon</h1>
+         <form id="loginForm">
+             <div class="input-group">
+                 <label for="username">Your Alias</label>
+                 <input type="text" id="username" name="username" required>
+             </div>
+             <div class="input-group">
+                 <label for="password">Secret Word</label>
+                 <div class="pass">
+                     <input type="password" id="password" name="password" required>
+                     <span id="togglePassword">👁️</span>
+                 </div>
+             </div>
+             <button type="submit" class="btn">Login</button>
+         </form>
+         <div id="errorMessage" class="error-message"></div>
+         <div class="links">
+              <a href="register.html">Sign the Ledger</a>
+         </div>
+     </div>
+
+     <script>
+        // --- Password Toggle ---
+        const togglePassword = document.querySelector('#togglePassword');
+        const passwordInput = document.querySelector('#password');
+
+        togglePassword.addEventListener('click', function (e) {
+            const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+            passwordInput.setAttribute('type', type);
+            this.textContent = type === 'password' ? '👁️' : '🙈';
+        });
+
+        // --- Login Logic ---
+        const loginForm = document.getElementById('loginForm');
+        const errorMessageDiv = document.getElementById('errorMessage');
+
+        loginForm.addEventListener('submit', async (event) => {
+            event.preventDefault(); // Prevent default form submission
+
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            
+            // Clear previous error messages
+            errorMessageDiv.style.display = 'none';
+            errorMessageDiv.textContent = '';
+
+            try {
+                const response = await fetch('http://localhost:3000/auth/login', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ username, password }),
+                });
+
+                const data = await response.json();
+
+                if (!response.ok) {
+                    // Display error message from the server
+                    throw new Error(data.message || 'Login failed.');
+                }
+
+                // --- On Successful Login ---
+                // 1. Save the token to localStorage
+                localStorage.setItem('authToken', data.token);
+
+                // 2. Redirect to the profile page
+                window.location.href = 'profile.html';
+
+            } catch (error) {
+                // Display any errors to the user
+                errorMessageDiv.textContent = error.message;
+                errorMessageDiv.style.display = 'block';
+                console.error('Login Error:', error);
+            }
+        });
+     </script>
+
+</body>
+</html>
